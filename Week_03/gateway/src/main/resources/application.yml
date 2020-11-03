@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: netty-gateway
+
+netty:
+  bosses: 1
+  workers: 5
+  port: 8088
+
+service:
+  router:
+    serverA: http://localhost:8803
+    serverB: serverB:http://localhost:8082
