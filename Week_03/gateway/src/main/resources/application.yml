@@ -10,4 +10,4 @@ netty:
 service:
   router:
     serverA: http://localhost:8803
-    serverB: serverB:http://localhost:8082
+    serverB: http://localhost:8082
