@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=club.gaiaproject.homework.common.Westeros,club.gaiaproject.homework.common.Gaia

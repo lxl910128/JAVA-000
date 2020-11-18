@@ -1,0 +1,5 @@
+self-realization: true
+# start person
+person:
+  name: tom
+  enable: true

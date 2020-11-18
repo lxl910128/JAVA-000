@@ -1,1 +1,5 @@
-学习笔记
+1. 使Java里的动态代理，实现一个简单的AOP:[地址](homework/test/src/main/java/club/gaiaproject/homework/proxy/ProxyTest.java)
+2. 写代码实现Spring Bean的装配:[地址](homework/test/src/main/java/club/gaiaproject/homework/spring/)
+3. 实现自动配置和 Starter:[地址](homework/test-spring-start)
+4. 原生JDBC实现:[地址](homework/test/src/main/java/club/gaiaproject/homework/jdbc)
+5. 单例:[地址](homework/test/src/main/java/club/gaiaproject/homework/singleton)
