@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
- club.gaiaproject.starter.PersonAutoConfiguration,club.gaiaproject.starter.PersonConfigure
