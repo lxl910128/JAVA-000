@@ -35,7 +35,8 @@ public class DataSourceConfiguration {
     @Value("${datasource.slave.password}")
     private String slavePwd;
     
-    @Bean(name = "routingDataSource")
+    // 自己实现 多数据源切换
+   /* @Bean
     public DataSource getDataSource() {
         HikariConfig masterConfig = new HikariConfig();
         masterConfig.setJdbcUrl(masterUrl);
@@ -62,5 +63,5 @@ public class DataSourceConfiguration {
         dataSource.setTargetDataSources(dsMap);
         
         return dataSource;
-    }
+    }*/
 }

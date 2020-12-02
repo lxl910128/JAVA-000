@@ -469,3 +469,70 @@ execute myPreparedStmt using @name;
 已插入990000条  sql 耗时：959225本批次耗时9154
 总计消耗967479ms
 ```
+
+# 基于spring实现读写分离
+## 概述
+基于spring提供的`AbstractRoutingDataSource`的`DataSource`抽象配置多个数据源，使用AOP的`ThreadLocal`的方式实现数据源切换，从而达到读写分离的效果。
+## 步骤
+1. [DynamicDataSource](data-source/src/main/java/club/gaiaproject/homework/source/common/DynamicDataSource.java) 实现,从ThreadLocal中读取标记
+2. 创建注解[ReadOnly](data-source/src/main/java/club/gaiaproject/homework/source/common/ReadOnly.java),该注解标记的Controller方法或Service方法会使用从数据源
+3. 实现切面[ServiceAOP](data-source/src/main/java/club/gaiaproject/homework/source/aop/ServiceAOP.java),该切面监控ReadOnly注解，触发时向ThreadLocal中写入标记。
+4. 配置Bean[DataSourceConfiguration](data-source/src/main/java/club/gaiaproject/homework/source/config/DataSourceConfiguration.java), 在配置中读取2个数据库配置，构建2个HikariDataSource，在用这个两个线程池构建DynamicDataSource，用DynamicDataSource作为spring（JPA）使用的dataSource
+## 测试
+实现简单的web接口，在[HelloController](data-source/src/main/java/club/gaiaproject/homework/source/controller/HelloController.java) 中，"/master"写主库，在"/slave"主要实现读从库，并在"/slave"添加`@ReadOnly`注解。  
+暂时关闭主从同步，通过调用发现，数据正常写入主库，且读数据正常。
+
+# 基于ss实现读写分离
+## 概述
+shardingsphere是Apache基金会支持的开源项目，他有提供了2中方式实现读写分离，分别是侵入项目的ss-jdbc和非侵入项目的ss-proxy。此次使用ss-jdbc测试读写分类
+## 步骤
+1. 引入SS-jdbc v4.1.1版本
+```java
+        <!-- https://mvnrepository.com/artifact/org.apache.shardingsphere/sharding-jdbc-core -->
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+
+        <!-- for spring namespace -->
+        <dependency>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-jdbc-spring-namespace</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+```
+2. 配置ss-jdbc
+```yaml
+spring:
+  shardingsphere:
+    datasource:
+      # 各个数据域别名
+      names: ds0,ds1
+      ds0:
+        # 数据库驱动类名
+        type: com.zaxxer.hikari.HikariDataSource
+        drivercClassName: com.mysql.jdbc.Driver
+        jdbcUrl: jdbc:mysql://lc0:3306/daenerys?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        username: test
+        password: test
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        drivercClassName: com.mysql.jdbc.Driver
+        jdbcUrl: jdbc:mysql://localhost:3306/test?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+        username: root
+        password: root
+    # 读写平衡配置
+    masterslave:
+      load-balance-algorithm-type: round_robin
+      name: ms
+      master-data-source-name: ds1
+      slave-data-source-names: ds0
+    props:
+      sql:
+        show: true
+    enabled: true
+```
+3. 其余与正常使用mysql无异
+## 测试
+与测试spring实现的读写分离方式一致，结果也一致
