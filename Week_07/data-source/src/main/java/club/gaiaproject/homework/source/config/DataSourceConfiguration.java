@@ -36,7 +36,7 @@ public class DataSourceConfiguration {
     private String slavePwd;
     
     // 自己实现 多数据源切换
-   /* @Bean
+    @Bean
     public DataSource getDataSource() {
         HikariConfig masterConfig = new HikariConfig();
         masterConfig.setJdbcUrl(masterUrl);
@@ -61,7 +61,8 @@ public class DataSourceConfiguration {
         dsMap.put("slave", slave);
         DynamicDataSource dataSource = new DynamicDataSource();
         dataSource.setTargetDataSources(dsMap);
+        dataSource.setDefaultTargetDataSource(master);
         
         return dataSource;
-    }*/
+    }
 }

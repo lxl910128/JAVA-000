@@ -1,0 +1,15 @@
+hasSharding: true
+
+datasource:
+  d0:
+    jdbc-url: jdbc:mysql://localhost:3306/d0?useSSL=false
+    username: root
+    password: root
+  d1:
+    jdbc-url: jdbc:mysql://localhost:3306/d1?useSSL=false
+    username: root
+    password: root
+  singleton:
+    jdbc-url: jdbc:mysql://localhost:3306/singleton?useSSL=false
+    username: root
+    password: root

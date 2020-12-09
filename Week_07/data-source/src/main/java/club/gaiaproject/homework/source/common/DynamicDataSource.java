@@ -13,7 +13,6 @@ import java.util.Map;
 @Slf4j
 public class DynamicDataSource extends AbstractRoutingDataSource {
     
-    
     @Override
     protected Object determineCurrentLookupKey() {
         return DatabaseContextHolder.getDbType().orElse("master");
