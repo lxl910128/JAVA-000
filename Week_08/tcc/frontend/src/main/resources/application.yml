@@ -1,0 +1,36 @@
+server:
+  port: 8081
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8079/eureka/
+  instance:
+    prefer-ip-address: true
+#Ribbon的负载均衡策略
+ribbon:
+  NFLoadBalancerRuleClassName:  com.netflix.loadbalancer.RandomRule
+  MaxAutoRetriesNextServer: 0
+  MaxAutoRetries: 0
+  ReadTimeout: 10000
+feign:
+  # 隔离,熔断,降级
+  hystrix:
+    enabled: false
+spring:
+  application:
+    name: frontend
+  datasource:
+    driver-class-name:  com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/shop?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+logging:
+  level:
+    root: info
+    org.springframework.web: info
+    org.apache.ibatis: debug
+    org.dromara.hmily.demo.bonuspoint: debug
+    org.dromara.hmily.demo.lottery: debug
+    org.dromara.hmily.demo: debug
+    io.netty: info

@@ -1,0 +1,17 @@
+server:
+  port: 8082
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8079/eureka/
+  instance:
+    prefer-ip-address: true
+spring:
+  application:
+    name: backend-a
+  datasource:
+    driver-class-name:  com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/shop?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
