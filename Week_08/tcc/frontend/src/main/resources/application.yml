@@ -12,7 +12,7 @@ ribbon:
   NFLoadBalancerRuleClassName:  com.netflix.loadbalancer.RandomRule
   MaxAutoRetriesNextServer: 0
   MaxAutoRetries: 0
-  ReadTimeout: 10000
+  ReadTimeout: 3000
 feign:
   # 隔离,熔断,降级
   hystrix:

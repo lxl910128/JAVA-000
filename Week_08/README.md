@@ -59,7 +59,33 @@
 
 此次选择实现hmily TCC实现demo
 
+## 模拟背景
 
+TCC分布式事务模拟需要以下4个服务：注册中心eureka、第一层服务frontend和两个二层服务backend。本demo模拟交易场景中使用分布式事务。交易请求发送至frontend，为完成整个流程，frontend需要调用backend-a完成扣款操作，需要调用backend-b完成出库操作。整个流程，frontend负责的交易、backend-a负责的扣款、backend-b负责的出库需要要么都完成要么都不完成，此时需要使用分布式事务。
+
+TCC模式分为try、Confirm、cannel，3个阶段，在frontend中，try阶段主要是确定接收到交易请求，变更订单状态为更新中。Confirm阶段即交易确认成功阶段需要将订单状态改为完成状态。cannel阶段是交易其他阶段失败触发的回退阶段，该阶段需要将订单状态改为失败。backend-a的try阶段主要是冻结指定账号资金，Confirm是解除冻结资金实际扣款，cannel是解除冻结资金不扣款。backend-b的try阶段是验证库存并冻结1个库存，Confirm是解除冻结库存实际出库1个，cannel则是解除冻结不出库。
+
+在使用TCC使，要注意：
+
+1. 在各个阶段内各模块要做事务，保证单个阶段要不成功要么都成功
+2. TCC保证的是服务间的事务完整
+3. 各个阶段尽量保证幂等，以防重试机制导致错误
+4. try阶段主要是功能是冻结资源或确认、准备资源。事务中所有环节都准备好资源后在一起进入Confirm提交阶段，如果有人try失败，之前try失败的则运行cannel。
+5. 如果各阶段都进入Confirm阶段，但有个服务Confirm失败，多次重试还失败，则需要人工进入。
+
+本demo使用hmily分布式事务框架。demo所有代码见[tcc项目](tcc)。使用hmily时注意以下几点：
+
+1. spring入口程序需要添加特殊注解，详情见[代码](tcc/frontend/src/java/club/gaiaproject/homewrok/tcc/frontend/FrontendApplication.java)
+2. 注意hmily配置文件的配置
+3. 注意包引用，hmily会特殊的使用到aop、自动配置等
+
+## 模拟过程
+
+在实验中我们让backend a 和 b 随机触发超时和报错，演成TCC流
+
+## 模拟结果
+
+与预期相符
 
 
 
