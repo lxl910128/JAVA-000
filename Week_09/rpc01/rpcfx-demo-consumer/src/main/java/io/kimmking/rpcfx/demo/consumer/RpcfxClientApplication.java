@@ -27,8 +27,6 @@ public class RpcfxClientApplication implements CommandLineRunner {
     private OrderService orderService;
     
     public static void main(String[] args) {
-        
-        
         SpringApplication.run(RpcfxClientApplication.class, args);
     }
     
@@ -39,6 +37,7 @@ public class RpcfxClientApplication implements CommandLineRunner {
             public User findById(int id) {
                 return null;
             }
+            
         };
     }
     
@@ -49,6 +48,7 @@ public class RpcfxClientApplication implements CommandLineRunner {
             public Order findOrderById(int id) {
                 return null;
             }
+            
         };
     }
     
