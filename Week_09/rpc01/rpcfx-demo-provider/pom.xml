@@ -52,6 +52,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- 反射工具类-->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections-spring</artifactId>
+            <version>0.9.9-RC1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <build>

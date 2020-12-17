@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public class RpcfxInvoker {
-    
+    private XStream xstream = new XStream(new StaxDriver());
     private RpcfxResolver resolver;
     
     public RpcfxInvoker(RpcfxResolver resolver) {
@@ -24,14 +24,12 @@ public class RpcfxInvoker {
         String serviceClass = request.getServiceClass();
         
         // 作业1：改成泛型和反射
-        
         // 2.封装一个统一的RpcfxException
         // 客户端也需要判断异常
         Object service = resolver.resolve(serviceClass);
         try {
             Method method = resolveMethodFromClass(service.getClass(), request.getMethod());
             Object result = method.invoke(service, request.getParams());
-            XStream xstream = new XStream(new StaxDriver());
             // 3.Xstream
             response.setResult(xstream.toXML(result));
             response.setStatus(true);

@@ -1,6 +1,8 @@
-package io.kimmking.rpcfx.demo.provider;
+package io.kimmking.rpcfx.demo.consumer.aop;
 
+import io.kimmking.rpcfx.api.RpcfxRequest;
 import io.kimmking.rpcfx.api.RpcfxResponse;
+import io.kimmking.rpcfx.demo.api.domain.User;
 import io.kimmking.rpcfx.error.RpcfxException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -10,20 +12,25 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Phoenix Luo
- * @version 2020/12/16
+ * @version 2020/12/17
  **/
 @Aspect
 @Component
-public class ServiceAop {
-    // 切包中所有类及方法
-    @Pointcut("execution(* io.kimmking.rpcfx.server.*.*(..))")
+public class ClientAOP {
+    @Pointcut("execution(* io.kimmking.rpcfx.demo.api.server.*.*(..))")
     public void pointcut() {
     }
     
     @Around("pointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
-            return joinPoint.proceed();
+            RpcfxRequest request = new RpcfxRequest();
+            request.setServiceClass(joinPoint.getTarget().getClass().getGenericInterfaces()[0].getTypeName());
+            request.setMethod(joinPoint.getSignature().getName());
+            request.setParams(joinPoint.getArgs());
+            
+            
+            return new User();
         } catch (RpcfxException e) {
             RpcfxResponse response = new RpcfxResponse();
             response.setResult(e.getMessage());
@@ -32,6 +39,4 @@ public class ServiceAop {
             return response;
         }
     }
-    
-    
 }
