@@ -27,6 +27,12 @@
             <artifactId>rpcfx-demo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/javassist/javassist -->
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.12.1.GA</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

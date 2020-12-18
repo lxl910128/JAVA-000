@@ -4,6 +4,7 @@ import io.kimmking.rpcfx.demo.api.domain.Order;
 import io.kimmking.rpcfx.demo.api.domain.User;
 import io.kimmking.rpcfx.demo.api.server.OrderService;
 import io.kimmking.rpcfx.demo.api.server.UserService;
+import io.kimmking.rpcfx.demo.consumer.bean.ProxyHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -30,26 +31,15 @@ public class RpcfxClientApplication implements CommandLineRunner {
         SpringApplication.run(RpcfxClientApplication.class, args);
     }
     
+    
     @Bean
-    public UserService getUserService() {
-        return new UserService() {
-            @Override
-            public User findById(int id) {
-                return null;
-            }
-            
-        };
+    public UserService getUserService(ProxyHandler handler) {
+        return handler.getProxyOject(UserService.class);
     }
     
     @Bean
-    public OrderService getOrderService() {
-        return new OrderService() {
-            @Override
-            public Order findOrderById(int id) {
-                return null;
-            }
-            
-        };
+    public OrderService getOrderService(ProxyHandler handler) {
+        return handler.getProxyOject(OrderService.class);
     }
     
     @Override
