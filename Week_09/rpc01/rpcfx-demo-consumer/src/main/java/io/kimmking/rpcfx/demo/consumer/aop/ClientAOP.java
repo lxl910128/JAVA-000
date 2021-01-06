@@ -27,6 +27,7 @@ public class ClientAOP {
     @Around("pointcut()")
     public Object around(ProceedingJoinPoint joinPoint) {
         try {
+            
             RpcfxRequest request = new RpcfxRequest();
             String interfaceName = joinPoint.getTarget().getClass().getGenericInterfaces()[0].getTypeName();
             request.setServiceClass(interfaceName);
